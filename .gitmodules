@@ -1,0 +1,9 @@
+[submodule "third-party/scrapy"]
+	path = third-party/scrapy
+	url = https://github.com/scrapy/scrapy.git
+[submodule "third-party/scrapy-playwright"]
+	path = third-party/scrapy-playwright
+	url = https://github.com/scrapy-plugins/scrapy-playwright.git
+[submodule "third-party/ollama"]
+	path = third-party/ollama
+	url = https://github.com/ollama/ollama.git

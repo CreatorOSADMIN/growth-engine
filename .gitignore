@@ -1,0 +1,28 @@
+# Dependencies and environment files
+.env
+.env.local
+.env.production
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+dist/
+build/
+
+# Data
+data/raw/*
+data/processed/*
+data/opportunities/*
+data/exports/*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
