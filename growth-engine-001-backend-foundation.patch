@@ -1,0 +1,109 @@
+diff --git a/.env.example b/.env.example
+new file mode 100644
+index 0000000..ebe9bbd
+--- /dev/null
++++ b/.env.example
+@@ -0,0 +1,2 @@
++# No environment variables are required for PATCH 001.
++# Configuration will be introduced in PATCH 002.
+diff --git a/app/__init__.py b/app/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/app/main.py b/app/main.py
+new file mode 100644
+index 0000000..36a944b
+--- /dev/null
++++ b/app/main.py
+@@ -0,0 +1,8 @@
++from fastapi import FastAPI
++
++app = FastAPI()
++
++
++@app.get("/health")
++def health() -> dict[str, str]:
++    return {"status": "ok"}
+diff --git a/engines/__init__.py b/engines/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/pyproject.toml b/pyproject.toml
+new file mode 100644
+index 0000000..24c8cf0
+--- /dev/null
++++ b/pyproject.toml
+@@ -0,0 +1,26 @@
++[project]
++name = "growth-engine"
++version = "0.1.0"
++description = "Growth Engine backend"
++requires-python = ">=3.11"
++dependencies = [
++    "fastapi==0.115.0",
++    "uvicorn==0.30.6",
++]
++
++[project.optional-dependencies]
++dev = [
++    "pytest==8.3.2",
++    "pytest-asyncio==0.24.0",
++    "httpx==0.27.2",
++]
++
++[build-system]
++requires = ["setuptools>=68"]
++build-backend = "setuptools.build_meta"
++
++[tool.setuptools.packages.find]
++include = ["app*", "engines*", "scripts*"]
++
++[tool.pytest.ini_options]
++testpaths = ["tests"]
+diff --git a/scripts/__init__.py b/scripts/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/__init__.py b/tests/__init__.py
+new file mode 100644
+index 0000000..e69de29
+diff --git a/tests/conftest.py b/tests/conftest.py
+new file mode 100644
+index 0000000..406cdbd
+--- /dev/null
++++ b/tests/conftest.py
+@@ -0,0 +1,9 @@
++import pytest
++from fastapi.testclient import TestClient
++
++from app.main import app
++
++
++@pytest.fixture
++def client() -> TestClient:
++    return TestClient(app)
+diff --git a/tests/test_app.py b/tests/test_app.py
+new file mode 100644
+index 0000000..f9687c5
+--- /dev/null
++++ b/tests/test_app.py
+@@ -0,0 +1,22 @@
++from fastapi.testclient import TestClient
++
++
++def test_app_imports() -> None:
++    from app.main import app
++
++    assert app is not None
++
++
++def test_health_returns_200(client: TestClient) -> None:
++    response = client.get("/health")
++    assert response.status_code == 200
++
++
++def test_health_returns_json(client: TestClient) -> None:
++    response = client.get("/health")
++    assert response.headers["content-type"].startswith("application/json")
++
++
++def test_health_indicates_healthy(client: TestClient) -> None:
++    response = client.get("/health")
++    assert response.json() == {"status": "ok"}
